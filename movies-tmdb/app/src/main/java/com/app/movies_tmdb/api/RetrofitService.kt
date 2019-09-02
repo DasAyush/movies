@@ -1,6 +1,6 @@
 package com.app.movies_tmdb.api
 
-import com.app.movies_tmdb.API_KEY
+import com.app.movies_tmdb.utils.API_KEY
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -17,6 +17,7 @@ class RetrofitService {
             val retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .baseUrl("https://api.themoviedb.org/3/")
                 .client(getClient())
                 .build()

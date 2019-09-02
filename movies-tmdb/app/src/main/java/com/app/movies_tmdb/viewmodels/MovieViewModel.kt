@@ -2,19 +2,32 @@ package com.app.movies_tmdb.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.app.movies_tmdb.datamodels.ApiResponse
-import com.app.movies_tmdb.repositories.MoviesRepo
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.app.movies_tmdb.callbacks.MoviesBoundaryCallback
+import com.app.movies_tmdb.data.repositories.MoviesDataSourceFactory
+import com.app.movies_tmdb.data.repositories.MoviesRepo
+import com.app.movies_tmdb.datamodels.Movies
 
 class MovieViewModel : ViewModel() {
 
     private val moviesRepo: MoviesRepo = MoviesRepo()
+    private lateinit var pagedListLiveData: LiveData<PagedList<Movies>>
 
-    fun getPopularMovies(): LiveData<ApiResponse> {
-        return moviesRepo.getPopularMovies()
+    fun getPopularMovies(): LiveData<PagedList<Movies>> {
+        pagedListLiveData = LivePagedListBuilder(MoviesDataSourceFactory(moviesRepo), getPagingConfig())
+                .setBoundaryCallback(MoviesBoundaryCallback())
+                .build()
+        return pagedListLiveData
     }
 
-    fun getNowPlayingMovies(): LiveData<ApiResponse> {
-        return moviesRepo.getNowPlayingMovies()
+    private fun getPagingConfig(): PagedList.Config {
+        return (PagedList.Config.Builder()).setEnablePlaceholders(true).setInitialLoadSizeHint(20)
+            .setPageSize(20).build()
     }
+
+//    fun getNowPlayingMovies(): LiveData<ApiResponse> {
+//        return moviesRepo.getNowPlayingMovies()
+//    }
 
 }

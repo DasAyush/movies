@@ -2,7 +2,7 @@ package com.app.movies_tmdb
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.app.movies_tmdb.ui.main.MainFragment
+import com.app.movies_tmdb.ui.main.MoviesListFragment
 
 class MoviesListActivity : AppCompatActivity() {
 
@@ -11,7 +11,7 @@ class MoviesListActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
+                .replace(R.id.container, MoviesListFragment.newInstance())
                 .commitNow()
         }
     }
