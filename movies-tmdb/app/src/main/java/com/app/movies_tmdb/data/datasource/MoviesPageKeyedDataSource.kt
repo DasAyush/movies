@@ -1,8 +1,9 @@
-package com.app.movies_tmdb.data.repositories
+package com.app.movies_tmdb.data.datasource
 
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
-import com.app.movies_tmdb.datamodels.ApiResponse
+import com.app.movies_tmdb.data.repositories.MoviesRepo
+import com.app.movies_tmdb.datamodels.MoviesApiResponse
 import com.app.movies_tmdb.datamodels.Movies
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,55 +15,68 @@ class MoviesPageKeyedDataSource(private val moviesRepo: MoviesRepo) :
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Movies>
     ) {
-        val response = moviesRepo.getPopularMovies(1)
-        response.enqueue(object : Callback<ApiResponse<Any?>> {
-            override fun onFailure(call: Call<ApiResponse<Any?>>, t: Throwable) {
+        moviesRepo.getPopularMovies(1).enqueue(object : Callback<MoviesApiResponse> {
+            override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
                 Log.d("datasource", t.message)
             }
 
             override fun onResponse(
-                call: Call<ApiResponse<Any?>>,
-                response: Response<ApiResponse<Any?>>
+                call: Call<MoviesApiResponse>,
+                response: Response<MoviesApiResponse>
             ) {
                 val popularMovies = response.body()!!.results
                 val previousPageKey = response.body()!!.page
                 callback.onResult(popularMovies, previousPageKey, previousPageKey + 1)
             }
         })
+
+//        moviesRepo.getPopularMovies(1).observeForever {
+//            val popularMovies = it.results
+//            val previousPageKey = it.page
+//            callback.onResult(popularMovies, previousPageKey, previousPageKey + 1)
+//        }
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movies>) {
-        moviesRepo.getPopularMovies(params.key).enqueue(object : Callback<ApiResponse<Any?>> {
-            override fun onFailure(call: Call<ApiResponse<Any?>>, t: Throwable) {
+        moviesRepo.getPopularMovies(params.key).enqueue(object : Callback<MoviesApiResponse> {
+            override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
                 Log.d("datasource", t.message)
             }
 
             override fun onResponse(
-                call: Call<ApiResponse<Any?>>,
-                response: Response<ApiResponse<Any?>>
+                call: Call<MoviesApiResponse>,
+                response: Response<MoviesApiResponse>
             ) {
                 if (response.isSuccessful) {
                     callback.onResult(response.body()!!.results, params.key.inc())
                 }
             }
         })
+
+//        moviesRepo.getPopularMovies(params.key).observeForever {
+//            callback.onResult(it.results, params.key.inc())
+//        }
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movies>) {
-        moviesRepo.getPopularMovies(params.key).enqueue(object : Callback<ApiResponse<Any?>> {
-            override fun onFailure(call: Call<ApiResponse<Any?>>, t: Throwable) {
+        moviesRepo.getPopularMovies(params.key).enqueue(object : Callback<MoviesApiResponse> {
+            override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
                 Log.d("datasource", t.message)
             }
 
             override fun onResponse(
-                call: Call<ApiResponse<Any?>>,
-                response: Response<ApiResponse<Any?>>
+                call: Call<MoviesApiResponse>,
+                response: Response<MoviesApiResponse>
             ) {
                 if (response.isSuccessful) {
                     callback.onResult(response.body()!!.results, params.key.dec())
                 }
             }
         })
+//
+//        moviesRepo.getPopularMovies(params.key).observeForever {
+//            callback.onResult(it.results, params.key.dec())
+//        }
     }
 
 }

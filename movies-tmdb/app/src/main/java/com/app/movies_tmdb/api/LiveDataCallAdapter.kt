@@ -1,7 +1,6 @@
 package com.app.movies_tmdb.api
 
 import androidx.lifecycle.LiveData
-import com.app.movies_tmdb.datamodels.ApiResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback
@@ -22,11 +21,11 @@ class LiveDataCallAdapter<R>(private val responseType: Type) :
                 if (started.compareAndSet(false, true)) {
                     call.enqueue(object : Callback<R> {
                         override fun onResponse(call: Call<R>, response: Response<R>) {
-//                            postValue(ApiResponse.create(response))
+                            postValue(ApiResponse.create(response))
                         }
 
                         override fun onFailure(call: Call<R>, throwable: Throwable) {
-//                            postValue(ApiResponse.create(throwable))
+                            postValue(ApiResponse.create(throwable))
                         }
                     })
                 }

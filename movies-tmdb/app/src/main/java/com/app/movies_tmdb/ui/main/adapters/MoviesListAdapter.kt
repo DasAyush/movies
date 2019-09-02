@@ -65,13 +65,14 @@ class MoviesListAdapter(diffCallback: MoviesListFragment.PaginationItemCallback)
             val imageUrl = IMAGE_BASE_URL.plus(movie!!.posterPath)
             val options = RequestOptions()
                 .placeholder(R.drawable.placeholder_image)
-
             Glide.with(itemView.context).load(imageUrl)
                 .apply(options)
                 .into(itemView.iv_poster)
 
             itemView.tv_movie_name.text = movie.originalTitle
-            itemView.tv_movie_rating.text = movie.voteAverage.toString()
+
+            val ratingText = "Rating : ".plus(movie.voteAverage.toString())
+            itemView.tv_movie_rating.text = ratingText
         }
     }
 

@@ -2,7 +2,7 @@ package com.app.movies_tmdb.datamodels
 
 import com.google.gson.annotations.SerializedName
 
-class ApiResponse<T>(
+data class MoviesApiResponse(
 
     @SerializedName("page") var page: Int,
     @SerializedName("total_results") var totalResults: Int,

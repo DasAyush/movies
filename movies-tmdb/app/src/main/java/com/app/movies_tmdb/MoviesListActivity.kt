@@ -9,6 +9,7 @@ class MoviesListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        supportActionBar!!.title = "Movies"
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MoviesListFragment.newInstance())

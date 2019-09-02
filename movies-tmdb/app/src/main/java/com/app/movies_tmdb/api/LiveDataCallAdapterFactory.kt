@@ -1,13 +1,14 @@
 package com.app.movies_tmdb.api
 
 import androidx.lifecycle.LiveData
-import com.app.movies_tmdb.datamodels.ApiResponse
+import com.app.movies_tmdb.datamodels.MoviesApiResponse
 import retrofit2.CallAdapter
+import retrofit2.CallAdapter.Factory
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-class LiveDataCallAdapterFactory : CallAdapter.Factory() {
+class LiveDataCallAdapterFactory : Factory() {
     override fun get(
         returnType: Type,
         annotations: Array<Annotation>,
