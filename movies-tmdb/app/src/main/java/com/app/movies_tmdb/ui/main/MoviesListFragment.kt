@@ -57,9 +57,10 @@ class MoviesListFragment : Fragment() {
         movieViewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
     }
 
-
     private fun fetchMoviesList() {
+        pb_loader.visibility = View.VISIBLE
         movieViewModel.getPopularMovies().observe(this, Observer {
+            pb_loader.visibility = View.GONE
             moviesListAdapter.submitList(it)
         })
     }
