@@ -14,6 +14,7 @@ import com.app.movies_tmdb.R
 import com.app.movies_tmdb.datamodels.Movies
 import com.app.movies_tmdb.ui.main.activities.MovieDetailsActivity
 import com.app.movies_tmdb.ui.main.adapters.MoviesListAdapter
+import com.app.movies_tmdb.utils.POPULAR
 import com.app.movies_tmdb.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movies.*
 
@@ -25,6 +26,7 @@ class MoviesListFragment : Fragment() {
 
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var moviesListAdapter: MoviesListAdapter
+    private lateinit var moviesType: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,10 +61,26 @@ class MoviesListFragment : Fragment() {
 
     private fun fetchMoviesList() {
         pb_loader.visibility = View.VISIBLE
-        movieViewModel.getPopularMovies().observe(this, Observer {
-            pb_loader.visibility = View.GONE
-            moviesListAdapter.submitList(it)
-        })
+        if (moviesType == POPULAR) {
+            movieViewModel.getPopularMovies().observe(this, Observer {
+                moviesListAdapter.submitList(it)
+                displayList()
+            })
+        } else {
+            movieViewModel.getNowPlayingMovies().observe(this, Observer {
+                moviesListAdapter.submitList(it)
+                displayList()
+            })
+        }
+    }
+
+    private fun displayList() {
+        pb_loader.visibility = View.GONE
+        rec_view_movies.visibility = View.VISIBLE
+    }
+
+    fun setMoviesType(type: String) {
+        moviesType = type
     }
 
     object PaginationItemCallback : DiffUtil.ItemCallback<Movies?>() {

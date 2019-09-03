@@ -17,9 +17,9 @@ class MoviesRepo {
         return apiService.getMovieDetails(movieId)
     }
 
-//    fun getNowPlayingMovies(page: Int): LiveData<MoviesApiResponse> {
-//        val apiService = RetrofitService.create()
-//        return apiService.getNowPlayingMovies(page)
-//    }
+    fun getNowPlayingMovies(page: Int): Call<MoviesApiResponse> {
+        val apiService = RetrofitService.create()
+        return apiService.getNowPlayingMovies(page)
+    }
 
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.app.movies_tmdb.data.datasource.MoviesDataSourceFactory
+import com.app.movies_tmdb.data.datasource.NowPlayingMoviesDataSourceFactory
 import com.app.movies_tmdb.data.repositories.MoviesRepo
 import com.app.movies_tmdb.datamodels.Movies
 import retrofit2.Call
@@ -18,8 +19,9 @@ class MovieViewModel : ViewModel() {
         pagedListLiveData = LivePagedListBuilder(
             MoviesDataSourceFactory(
                 moviesRepo
-            ), getPagingConfig())
-                .build()
+            ), getPagingConfig()
+        )
+            .build()
         return pagedListLiveData
     }
 
@@ -32,8 +34,12 @@ class MovieViewModel : ViewModel() {
         return moviesRepo.getMovieDetails(movieId)
     }
 
-//    fun getNowPlayingMovies(): LiveData<MoviesApiResponse> {
-//        return moviesRepo.getNowPlayingMovies()
-//    }
+    fun getNowPlayingMovies(): LiveData<PagedList<Movies>> {
+        pagedListLiveData = LivePagedListBuilder(
+            NowPlayingMoviesDataSourceFactory(moviesRepo), getPagingConfig()
+        )
+            .build()
+        return pagedListLiveData
+    }
 
 }

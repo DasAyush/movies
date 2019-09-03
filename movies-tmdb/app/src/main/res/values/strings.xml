@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Movies-Tmdb</string>
     <string name="movie_image">movie-image</string>
+    <string name="overview_label">Overview :</string>
 </resources>
