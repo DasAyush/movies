@@ -36,7 +36,7 @@ class MoviesListActivity : AppCompatActivity() {
         val arrayAdapter =
             ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, optionsList)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_category.setPadding(4, 0, 4, 0)
+        spinner_category.setPadding(4, 0, 0, 0)
         spinner_category.adapter = arrayAdapter
     }
 
@@ -55,6 +55,7 @@ class MoviesListActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
+                // set selected category color to white
                 (parent!!.getChildAt(0) as TextView).setTextColor(Color.WHITE)
 
                 // fragment inflation based on the movie categories
