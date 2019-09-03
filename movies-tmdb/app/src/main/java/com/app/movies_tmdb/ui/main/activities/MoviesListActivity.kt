@@ -1,7 +1,8 @@
-package com.app.movies_tmdb
+package com.app.movies_tmdb.ui.main.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.app.movies_tmdb.R
 import com.app.movies_tmdb.ui.main.MoviesListFragment
 
 class MoviesListActivity : AppCompatActivity() {
@@ -12,7 +13,9 @@ class MoviesListActivity : AppCompatActivity() {
         supportActionBar!!.title = "Movies"
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MoviesListFragment.newInstance())
+                .replace(R.id.container,
+                    MoviesListFragment.newInstance()
+                )
                 .commitNow()
         }
     }

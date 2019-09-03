@@ -14,8 +14,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.item_movies_list.view.*
 
-class MoviesListAdapter(diffCallback: MoviesListFragment.PaginationItemCallback) :
-    PagedListAdapter<Movies, MoviesListAdapter.MoviesViewHolder>(diffCallback) {
+class MoviesListAdapter(
+    diffCallback: MoviesListFragment.PaginationItemCallback
+) : PagedListAdapter<Movies, MoviesListAdapter.MoviesViewHolder>(diffCallback) {
+
+    private lateinit var listener: MoviesListFragment.ItemSelectedListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         return when (viewType) {
@@ -60,7 +63,11 @@ class MoviesListAdapter(diffCallback: MoviesListFragment.PaginationItemCallback)
         }
     }
 
-    class MoviesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
+    fun setItemClickListener(itemSelectedListener: MoviesListFragment.ItemSelectedListener) {
+        listener = itemSelectedListener
+    }
+
+    inner class MoviesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         fun setData(movie: Movies?) {
             val imageUrl = IMAGE_BASE_URL.plus(movie!!.posterPath)
             val options = RequestOptions()
@@ -73,6 +80,10 @@ class MoviesListAdapter(diffCallback: MoviesListFragment.PaginationItemCallback)
 
             val ratingText = "Rating : ".plus(movie.voteAverage.toString())
             itemView.tv_movie_rating.text = ratingText
+
+            itemView.setOnClickListener {
+                listener.onItemClicked(movie.id)
+            }
         }
     }
 

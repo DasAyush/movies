@@ -1,5 +1,6 @@
 package com.app.movies_tmdb.ui.main
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.movies_tmdb.R
 import com.app.movies_tmdb.datamodels.Movies
+import com.app.movies_tmdb.ui.main.activities.MovieDetailsActivity
 import com.app.movies_tmdb.ui.main.adapters.MoviesListAdapter
 import com.app.movies_tmdb.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movies.*
@@ -41,6 +43,13 @@ class MoviesListFragment : Fragment() {
     private fun initViews() {
         rec_view_movies.layoutManager = LinearLayoutManager(context)
         moviesListAdapter = MoviesListAdapter(PaginationItemCallback)
+        moviesListAdapter.setItemClickListener(object : ItemSelectedListener {
+            override fun onItemClicked(movieId: Int) {
+                val intent = Intent(activity, MovieDetailsActivity::class.java)
+                intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId)
+                startActivity(intent)
+            }
+        })
         rec_view_movies.adapter = moviesListAdapter
     }
 
@@ -63,6 +72,10 @@ class MoviesListFragment : Fragment() {
         override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
             return oldItem.originalTitle == newItem.originalTitle && oldItem.posterPath == newItem.posterPath
         }
+    }
+
+    interface ItemSelectedListener {
+        fun onItemClicked(movieId: Int)
     }
 
 }
