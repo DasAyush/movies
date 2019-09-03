@@ -9,6 +9,9 @@ import com.app.movies_tmdb.datamodels.Movies
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
+/**
+ * binding adapter for movie details screen
+ */
 class MovieDetailsBindingAdapter {
 
     companion object {
@@ -33,11 +36,11 @@ class MovieDetailsBindingAdapter {
         @BindingAdapter("genres")
         @JvmStatic
         fun setMovieGenres(textView: TextView, genres: List<MovieGenre>?) {
-            var genreString = ""
+            var genreString = "Genres : "
             if (genres != null && genres.isNotEmpty()) {
-                genres.indices.forEach { i ->
-                    if (i < genres.size - 1) {
-                        genreString.plus(genres[i].name.plus(","))
+                for (i in genres.indices) {
+                    genreString = if (i < genres.size - 1) {
+                        genreString.plus(genres[i].name.plus(", "))
                     } else {
                         genreString.plus(genres[i].name)
                     }

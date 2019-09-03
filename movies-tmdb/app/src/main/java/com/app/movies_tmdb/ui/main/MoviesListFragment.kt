@@ -3,18 +3,22 @@ package com.app.movies_tmdb.ui.main
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.movies_tmdb.R
 import com.app.movies_tmdb.datamodels.Movies
 import com.app.movies_tmdb.ui.main.activities.MovieDetailsActivity
 import com.app.movies_tmdb.ui.main.adapters.MoviesListAdapter
-import com.app.movies_tmdb.utils.POPULAR
+import com.app.movies_tmdb.utils.MOVIES_POPULAR
 import com.app.movies_tmdb.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movies.*
 
@@ -27,6 +31,8 @@ class MoviesListFragment : Fragment() {
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var moviesListAdapter: MoviesListAdapter
     private lateinit var moviesType: String
+    private lateinit var progressBar: ProgressBar
+    private lateinit var recViewMovies: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +49,9 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun initViews() {
-        rec_view_movies.layoutManager = LinearLayoutManager(context)
+        progressBar = pb_loader
+        recViewMovies = rec_view_movies
+        recViewMovies.layoutManager = LinearLayoutManager(context)
         moviesListAdapter = MoviesListAdapter(PaginationItemCallback)
         moviesListAdapter.setItemClickListener(object : ItemSelectedListener {
             override fun onItemClicked(movieId: Int) {
@@ -52,7 +60,7 @@ class MoviesListFragment : Fragment() {
                 startActivity(intent)
             }
         })
-        rec_view_movies.adapter = moviesListAdapter
+        recViewMovies.adapter = moviesListAdapter
     }
 
     private fun initViewModel() {
@@ -60,13 +68,16 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun fetchMoviesList() {
-        pb_loader.visibility = View.VISIBLE
-        if (moviesType == POPULAR) {
+        progressBar.visibility = View.VISIBLE
+
+        // fetch popular movies
+        if (moviesType == MOVIES_POPULAR) {
             movieViewModel.getPopularMovies().observe(this, Observer {
                 moviesListAdapter.submitList(it)
                 displayList()
             })
         } else {
+            // fetch now-playing movies
             movieViewModel.getNowPlayingMovies().observe(this, Observer {
                 moviesListAdapter.submitList(it)
                 displayList()
@@ -75,14 +86,22 @@ class MoviesListFragment : Fragment() {
     }
 
     private fun displayList() {
-        pb_loader.visibility = View.GONE
-        rec_view_movies.visibility = View.VISIBLE
+        Handler(Looper.getMainLooper()).postDelayed({
+            progressBar.visibility = View.GONE
+            recViewMovies.visibility = View.VISIBLE
+        }, 2000)
     }
 
+    /**
+     * sets the movie-type as popular or now-playing
+     */
     fun setMoviesType(type: String) {
         moviesType = type
     }
 
+    /**
+     * callback for the movies recycler view
+     */
     object PaginationItemCallback : DiffUtil.ItemCallback<Movies?>() {
         override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
             return oldItem.id == newItem.id

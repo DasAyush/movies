@@ -9,15 +9,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * data source class for fetching data from network for now-playing category
+ */
 class NowPlayingMoviesDataSource(private val moviesRepo: MoviesRepo) :
     PageKeyedDataSource<Int, Movies>() {
+
+    // fetches initial list
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Movies>
     ) {
         moviesRepo.getNowPlayingMovies(1).enqueue(object : Callback<MoviesApiResponse> {
             override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
-                Log.d("datasource", t.message)
+                Log.d("data-source", t.message.toString())
             }
 
             override fun onResponse(
@@ -32,10 +37,11 @@ class NowPlayingMoviesDataSource(private val moviesRepo: MoviesRepo) :
 
     }
 
+    // fetches next list
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movies>) {
         moviesRepo.getNowPlayingMovies(params.key).enqueue(object : Callback<MoviesApiResponse> {
             override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
-                Log.d("datasource", t.message)
+                Log.d("data-source", t.message.toString())
             }
 
             override fun onResponse(
@@ -50,10 +56,11 @@ class NowPlayingMoviesDataSource(private val moviesRepo: MoviesRepo) :
 
     }
 
+    // fetches previous list
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movies>) {
         moviesRepo.getNowPlayingMovies(params.key).enqueue(object : Callback<MoviesApiResponse> {
             override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
-                Log.d("datasource", t.message)
+                Log.d("data-source", t.message.toString())
             }
 
             override fun onResponse(

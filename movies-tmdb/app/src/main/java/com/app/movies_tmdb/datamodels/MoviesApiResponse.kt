@@ -2,6 +2,9 @@ package com.app.movies_tmdb.datamodels
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * movies list response
+ */
 data class MoviesApiResponse(
 
     @SerializedName("page") var page: Int,

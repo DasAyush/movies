@@ -9,15 +9,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MoviesPageKeyedDataSource(private val moviesRepo: MoviesRepo) :
+/**
+ * class to fetch data from network for popular movies
+ */
+class PopularMoviesPageKeyedDataSource(private val moviesRepo: MoviesRepo) :
     PageKeyedDataSource<Int, Movies>() {
+
+    // fetches initial list
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Movies>
     ) {
         moviesRepo.getPopularMovies(1).enqueue(object : Callback<MoviesApiResponse> {
             override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
-                Log.d("datasource", t.message)
+                Log.d("data-source", t.message.toString())
             }
 
             override fun onResponse(
@@ -29,18 +34,13 @@ class MoviesPageKeyedDataSource(private val moviesRepo: MoviesRepo) :
                 callback.onResult(popularMovies, previousPageKey, previousPageKey + 1)
             }
         })
-
-//        moviesRepo.getPopularMovies(1).observeForever {
-//            val popularMovies = it.results
-//            val previousPageKey = it.page
-//            callback.onResult(popularMovies, previousPageKey, previousPageKey + 1)
-//        }
     }
 
+    // fetches next list
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movies>) {
         moviesRepo.getPopularMovies(params.key).enqueue(object : Callback<MoviesApiResponse> {
             override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
-                Log.d("datasource", t.message)
+                Log.d("data-source", t.message.toString())
             }
 
             override fun onResponse(
@@ -52,16 +52,13 @@ class MoviesPageKeyedDataSource(private val moviesRepo: MoviesRepo) :
                 }
             }
         })
-
-//        moviesRepo.getPopularMovies(params.key).observeForever {
-//            callback.onResult(it.results, params.key.inc())
-//        }
     }
 
+    // fetches previous list
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movies>) {
         moviesRepo.getPopularMovies(params.key).enqueue(object : Callback<MoviesApiResponse> {
             override fun onFailure(call: Call<MoviesApiResponse>, t: Throwable) {
-                Log.d("datasource", t.message)
+                Log.d("data-source", t.message.toString())
             }
 
             override fun onResponse(
@@ -73,10 +70,6 @@ class MoviesPageKeyedDataSource(private val moviesRepo: MoviesRepo) :
                 }
             }
         })
-//
-//        moviesRepo.getPopularMovies(params.key).observeForever {
-//            callback.onResult(it.results, params.key.dec())
-//        }
     }
 
 }

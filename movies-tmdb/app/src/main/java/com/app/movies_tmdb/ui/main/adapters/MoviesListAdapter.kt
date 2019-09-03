@@ -48,6 +48,11 @@ class MoviesListAdapter(
         }
     }
 
+    /**
+     * 2 item view types are used
+     * one for normal item inflation
+     * one for showing loader at the end of the list
+     */
     override fun getItemViewType(position: Int): Int {
         return when (position) {
             in 0 until (itemCount - 1) -> MovieItemViewTypes.MOVIE_ITEM
@@ -55,6 +60,9 @@ class MoviesListAdapter(
         }
     }
 
+    /**
+     * returning the size of the list including the progress loader
+     */
     override fun getItemCount(): Int {
         return if (currentList != null && currentList!!.size > 1) {
             currentList!!.size + 1
@@ -63,6 +71,9 @@ class MoviesListAdapter(
         }
     }
 
+    /**
+     * listener to detect the clicks on movie items
+     */
     fun setItemClickListener(itemSelectedListener: MoviesListFragment.ItemSelectedListener) {
         listener = itemSelectedListener
     }

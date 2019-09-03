@@ -44,6 +44,9 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * fetching a single movie's details
+     */
     private fun fetchMovieDetails() {
         binding.showProgress = true
         movieViewModel.getMovieDetails(movieId).enqueue(object : Callback<Movies> {
@@ -61,12 +64,16 @@ class MovieDetailsActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * data binding for setting the ui data
+     */
     private fun setMovieData(body: Movies?) {
         if (body != null) {
             binding.movie = body
         }
     }
 
+    // intent key for getting the movie-id
     companion object {
         val EXTRA_MOVIE_ID: String? by lazy { "EXTRA_MOVIE_ID" }
     }

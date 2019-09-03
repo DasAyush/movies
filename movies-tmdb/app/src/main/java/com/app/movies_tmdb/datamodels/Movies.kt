@@ -2,6 +2,9 @@ package com.app.movies_tmdb.datamodels
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * single movie response
+ */
 data class Movies(
 
     @SerializedName("popularity") val popularity: Double,
